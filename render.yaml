@@ -1,0 +1,29 @@
+# render.yaml — P-Stream backend on Render (Free) + Neon Postgres (external)
+
+services:
+  - type: web
+    name: pstream-backend
+    runtime: image
+    plan: free
+    region: oregon
+    autoDeploy: true
+    image:
+      url: ghcr.io/dumbutdumber/backend:latest
+    healthCheckPath: /
+    envVars:
+      # The backend listens on port 80 per P-Stream docs
+      - key: PORT
+        value: "80"
+
+      # Paste your Neon connection URI in the Render dashboard (don't commit it)
+      # Example: postgresql://USER:PASSWORD@HOST/dbname?sslmode=require&channel_binding=require
+      - key: DATABASE_URL
+        sync: false
+
+      # Provide a strong 32+ char secret in the dashboard (don't commit it)
+      - key: CRYPTO_SECRET
+        sync: false
+
+      # Optional label for the instance
+      - key: META_NAME
+        value: unofficial-backend
